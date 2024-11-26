@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recherche avec Embeddings</title>
+</head>
+<body>
+    <h1>Recherche avec Embeddings</h1>
+    <form method="post" action="/search">
+        <label for="query">Entrez votre requête :</label><br>
+        <input type="text" id="query" name="query" required>
+        <button type="submit">Rechercher</button>
+    </form>
+    <hr>
+
+    {% if error %}
+    <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    {% if results %}
+    <h2>Résultats :</h2>
+    <ul>
+        {% for result in results %}
+        <li><strong>Document ID :</strong> {{ result.id }}<br>
+            <strong>Texte :</strong> {{ result.document_text }}<br>
+            <strong>Score de similarité :</strong> {{ result.similarity_score }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</body>
+</html>

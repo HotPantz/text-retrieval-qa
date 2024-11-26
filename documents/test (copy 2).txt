@@ -1,0 +1,24 @@
+{
+  "documents": [
+    "La Révolution française de 1789 a marqué le début d'une ère de changements politiques et sociaux profonds en Europe.",
+    "Napoléon Bonaparte a été couronné empereur des Français en 1804 à la cathédrale Notre-Dame de Paris.",
+    "La signature du Traité de Versailles en 1919 a mis fin à la Première Guerre mondiale.",
+    "L'intelligence artificielle transforme des secteurs comme la santé, la finance et l'éducation.",
+    "L'invention de l'imprimerie par Gutenberg en 1440 a révolutionné la diffusion des connaissances.",
+    "Les voitures autonomes utilisent des algorithmes d'apprentissage profond pour analyser leur environnement.",
+    "La théorie de la relativité générale d'Einstein a changé notre compréhension de la gravité.",
+    "La découverte de la structure de l'ADN en 1953 a ouvert la voie à la génétique moderne.",
+    "Le télescope spatial James Webb a capturé des images inédites des confins de l'univers.",
+    "Le Louvre, situé à Paris, est le musée le plus visité au monde.",
+    "La langue française est parlée par plus de 300 millions de personnes dans le monde.",
+    "La cathédrale de Chartres est un chef-d'œuvre de l'architecture gothique médiévale.",
+    "La Révolution industrielle a débuté en Grande-Bretagne au XVIIIe siècle, transformant l'économie mondiale.",
+    "La cryptomonnaie, comme le Bitcoin, a changé la manière dont les transactions financières sont effectuées.",
+    "Le Mont-Saint-Michel est l'une des merveilles les plus emblématiques de France.",
+    "Le Canal de Suez a été inauguré en 1869, révolutionnant le commerce maritime mondial.",
+    "La découverte de la pénicilline par Alexander Fleming a sauvé des millions de vies.",
+    "La Déclaration des droits de l'homme et du citoyen, rédigée en 1789, est un texte fondamental de la Révolution française.",
+    "La Tour Eiffel, construite pour l'Exposition universelle de 1889, est devenue un symbole de la France.",
+    "Marie Curie a été la première femme à recevoir un prix Nobel pour ses travaux sur la radioactivité."
+  ]
+}
