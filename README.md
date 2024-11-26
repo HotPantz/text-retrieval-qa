@@ -1,107 +1,154 @@
-# FastAPI Document Encoder and Search
-This project provides a FastAPI application for encoding documents and searching through them using sentence embeddings. The application uses the `sentence-transformers` library to generate embeddings and store them for later retrieval.
+# Document Embedding and Search API
+
+This repository provides a FastAPI-based system for encoding documents, storing them as embeddings, and performing searches to retrieve relevant results. It integrates multiple services to streamline document management and query handling, including embedding generation, database storage, and query augmentation.
+
+## Features
+
+- **Document Embedding:** Uses `sentence-transformers` to generate embeddings from textual data.
+- **Database Storage:** Stores embeddings and corresponding documents in a MariaDB database.
+- **Search Functionality:** Allows users to query stored documents by relevance using cosine similarity.
+- **Web Interface:** A user-friendly web interface for submitting queries and viewing results.
+- **Watchdog Script:** Automatically detects new `.txt` files in a specified directory and processes them.
+
+---
 
 ## Installation
 
-1. Clone the repository:
+### Prerequisites
+
+- Python 3.9 or above
+- MariaDB installed and running
+- Required Python libraries (see `requirements.txt`)
+
+### Steps
+
+1. **Clone the Repository:**
     ```bash
     git clone <repository_url>
     cd <repository_directory>
     ```
 
-2. Create a virtual environment and activate it:
+2. **Set Up a Virtual Environment:**
     ```bash
     python -m venv venv
     source venv/bin/activate  # On Windows use `venv\Scripts\activate`
     ```
 
-3. Install the required dependencies:
+3. **Install Dependencies:**
     ```bash
     pip install -r requirements.txt
     ```
 
+4. **Configure MariaDB:**
+    - Create a database named `workflow_db`.
+    - Set up a user with appropriate credentials.
+    - Update `config.py` with the database connection string.
+
+    ```python
+    DATABASE_URL = "mariadb+pymysql://user:password@localhost/workflow_db"
+    ```
+
+5. **Ensure Directory Structure:**
+    - Create the `documents` folder to store `.txt` files for automatic embedding.
+    - Include `templates/` and `static/` directories for the web interface.
+
+---
+
 ## Usage
 
-1. Run the FastAPI application:
+### Starting the Services
+
+1. **Run All Services:**
+    Use the launcher script to start the system:
     ```bash
-    uvicorn main:app --reload
+    python launch_services.py
     ```
 
-2. The API will be available at `http://127.0.0.1:8000`.
+2. **Access the Web Interface:**
+    Open your browser and go to [http://127.0.0.1:8003](http://127.0.0.1:8003).
 
-## API Endpoints
+### Endpoints Overview
 
-### Encode Documents
-
-- **URL:** `/encode_documents`
+#### 1. Embedding Service
+- **URL:** `http://127.0.0.1:8001/embed`
 - **Method:** `POST`
 - **Request Body:**
     ```json
     {
-        "documents": ["Article 1 : Toute personne a droit au respect de sa vie privée...", "Le climat change, il est temps d'agir.", ...]
+        "documents": ["Your text here"]
     }
     ```
 - **Response:**
     ```json
     {
-        "status": "success",
-        "message": "Documents encoded and stored successfully"
+        "embeddings": [[...]]
     }
     ```
 
-### Search Documents
-
-- **URL:** `/search_documents`
-- **Method:** `POST`
-- **Request Body:**
+#### 2. Database Service
+- **Insert Embedding:**
+  - **URL:** `http://127.0.0.1:8002/insert_embedding/`
+  - **Method:** `POST`
+  - **Request Body:**
     ```json
     {
-        "query": "Droit à la vie privée"
+        "document_text": "Your text here",
+        "embedding": [...]
     }
     ```
-- **Response:**
+- **Search Embeddings:**
+  - **URL:** `http://127.0.0.1:8002/search_embeddings/`
+  - **Method:** `POST`
+  - **Request Body:**
+    ```json
+    [0.1, 0.2, 0.3, ...]  # Example embedding vector
+    ```
+
+#### 3. Composite API
+- **Process Document:**
+  - **URL:** `http://127.0.0.1:8000/process_document`
+  - **Method:** `POST`
+  - **Request Body:**
     ```json
     {
-        "relevant_documents": [
-            {
-                "id": 1,
-                "text": "Article 1 : Toute personne a droit au respect de sa vie privée...",
-                "similarity_score": 0.89
-            },
-            ...
-        ]
+        "documents": ["Your text here"]
+    }
+    ```
+- **Search Documents:**
+  - **URL:** `http://127.0.0.1:8000/search`
+  - **Method:** `POST`
+  - **Request Body:**
+    ```json
+    {
+        "query": "Your search term"
     }
     ```
 
-## Code Overview
+---
 
-### Main Components
+## Architecture Overview
 
-- **FastAPI Application:** Initializes the FastAPI app and defines the endpoints.
-- **SentenceTransformer Model:** Loads the `paraphrase-MiniLM-L6-v2` model for encoding sentences.
-- **Document and Query Models:** Define the request body structure using Pydantic.
-- **Embedding Functions:** Functions to save and load embeddings from a JSON file.
-- **Endpoint Handlers:** Functions to handle the `/encode_documents` and `/search_documents` endpoints.
+1. **Watchdog Script:**
+    - Monitors the `documents` directory for new `.txt` files.
+    - Sends the detected files to the composite API for processing.
 
-### Error Handling
+2. **Composite API Workflow:**
+    - Calls the embedding service to generate embeddings.
+    - Stores embeddings in the database using the database service.
+    - Handles query embedding and retrieves relevant documents from the database.
 
-The application includes error handling for file I/O operations, JSON decoding, and encoding processes. HTTP exceptions are raised with appropriate status codes and messages.
+3. **Web Interface:**
+    - Provides a simple form for users to submit queries.
+    - Displays top results based on similarity.
 
-## Watchdog Integration
-
-A watchdog script has been added to automatically detect new `.txt` files in the `documents` directory and send them to the `/encode_documents` endpoint for encoding. This ensures that any new documents added to the directory are processed without manual intervention.
-
-## Composite API Workflow
-
-The watchdog script scans for new `.txt` files with documents. When a new file is detected, it calls the composite API, which then:
-1. Calls the embedding service to generate embeddings.
-2. Calls the insertion service to store the embeddings in the database.
-
-When a search request is made, the composite API:
-1. Calls the embedding service to generate embeddings for the query.
-2. Calls the search service to find relevant documents in the database.
-3. Uses ChatGPT to generate a response for the client.
+---
 
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+---
+
+## Contributions
+
+Contributions are welcome! Please fork the repository and submit a pull request with your changes.
